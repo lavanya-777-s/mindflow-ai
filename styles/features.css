@@ -1,0 +1,1126 @@
+/*
+ * MindMap AI - Feature Pages Design System
+ * Modular styling rules for deep interactive views
+ */
+
+/* Shared Feature Page Layout */
+.feature-page-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    align-items: start;
+    margin-top: 2rem;
+}
+
+@media (max-width: 992px) {
+    .feature-page-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.feature-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-tagline {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+}
+
+.feature-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.feature-description {
+    color: var(--color-text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+
+.feature-interactive-panel {
+    min-height: 500px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   AI COMPANION PAGE
+   ========================================================================== */
+
+/* Premium Animated AI Orb */
+.orb-simulation-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 240px;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.companion-orb {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9) 0%, rgba(var(--color-accent-rgb), 0.7) 40%, rgba(var(--color-accent-alt-rgb), 0.9) 80%);
+    box-shadow: 0 0 50px rgba(var(--color-accent-rgb), 0.4), inset 0 -10px 20px rgba(0, 0, 0, 0.4);
+    filter: blur(0.5px);
+    position: relative;
+    animation: orbPulse 5s ease-in-out infinite alternate, orbRotate 12s linear infinite;
+    z-index: 2;
+}
+
+.orb-glow-ring {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--color-accent-rgb), 0.2);
+    box-shadow: 0 0 30px rgba(var(--color-accent-rgb), 0.1);
+    animation: ringPulse 3s ease-in-out infinite alternate;
+    z-index: 1;
+}
+
+.orb-glow-ring-2 {
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    border: 1px dashed rgba(var(--color-accent-alt-rgb), 0.15);
+    animation: ringPulse2 4s ease-in-out infinite alternate-reverse;
+    z-index: 1;
+}
+
+@keyframes orbPulse {
+    0% { transform: scale(1) translateY(0px); box-shadow: 0 0 50px rgba(var(--color-accent-rgb), 0.4); }
+    100% { transform: scale(1.08) translateY(-6px); box-shadow: 0 0 75px rgba(var(--color-accent-rgb), 0.6); }
+}
+
+@keyframes orbRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes ringPulse {
+    0% { transform: scale(0.95); opacity: 0.5; }
+    100% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes ringPulse2 {
+    0% { transform: scale(0.95) rotate(0deg); opacity: 0.3; }
+    100% { transform: scale(1.05) rotate(180deg); opacity: 0.8; }
+}
+
+/* AI Results Grid cards */
+.companion-results-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.advice-card {
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.advice-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.advice-title {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    margin-bottom: 0.35rem;
+}
+
+.advice-content {
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+}
+
+/* Chat thinking indicator */
+.companion-thinking {
+    display: flex;
+    gap: 0.4rem;
+    padding: 1rem 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.thinking-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    animation: bounceDot 0.6s infinite alternate;
+}
+
+.thinking-dot:nth-child(2) { animation-delay: 0.15s; }
+.thinking-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounceDot {
+    to { transform: translateY(-6px); opacity: 0.4; }
+}
+
+
+/* ==========================================================================
+   FOCUS TRACKING PAGE
+   ========================================================================== */
+.focus-timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 1rem 0;
+}
+
+.timer-visual-box {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.timer-ring-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.timer-ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.03);
+    stroke-width: 8;
+}
+
+.timer-ring-progress {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 628; /* Approx 2 * pi * r (r=100) */
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.timer-numbers {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+}
+
+.timer-subtext {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+.focus-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.preset-btn {
+    padding: 0.6rem;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.preset-btn.active, .preset-btn:hover {
+    background: rgba(var(--color-accent-rgb), 0.1);
+    border-color: rgba(var(--color-accent-rgb), 0.4);
+    color: var(--color-text-primary);
+}
+
+.custom-time-inputs {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.timer-control-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.timer-control-buttons .action-btn {
+    flex: 1;
+}
+
+.focus-message-box {
+    text-align: center;
+    min-height: 40px;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    transition: opacity var(--transition-normal);
+}
+
+
+/* ==========================================================================
+   MOOD ANALYTICS PAGE
+   ========================================================================== */
+.mood-interface-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.wave-display-card {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, rgba(var(--color-accent-rgb), 0.03) 100%);
+}
+
+.mood-title-overlay {
+    position: absolute;
+    z-index: 5;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.mood-waves-svg {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mood-wave-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 2.5;
+    opacity: 0.35;
+}
+
+.wave-p1 {
+    stroke: var(--color-accent);
+    animation: moveWave1 12s linear infinite;
+}
+
+.wave-p2 {
+    stroke: var(--color-accent-alt);
+    animation: moveWave2 16s linear infinite;
+}
+
+@keyframes moveWave1 {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes moveWave2 {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.mood-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+}
+
+.mood-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.mood-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+}
+
+.mood-btn.active {
+    background: rgba(var(--color-accent-rgb), 0.12);
+    border-color: rgba(var(--color-accent-rgb), 0.4);
+}
+
+.mood-emoji {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.mood-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-family: var(--font-heading);
+    font-weight: 500;
+}
+
+.mood-btn.active .mood-label {
+    color: var(--color-text-primary);
+}
+
+
+/* ==========================================================================
+   BURNOUT DETECTION PAGE
+   ========================================================================== */
+.burnout-brain-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 220px;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.brain-mesh-canvas {
+    width: 260px;
+    height: 220px;
+    background: transparent;
+    filter: drop-shadow(0 0 15px rgba(var(--color-accent-rgb), 0.25));
+}
+
+.metrics-progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.progress-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width var(--transition-normal), background var(--transition-normal);
+}
+
+/* Dynamic color statuses */
+.progress-bar-fill.normal { background: var(--color-accent); }
+.progress-bar-fill.warning { background: #f59e0b; }
+.progress-bar-fill.critical { background: #ef4444; }
+
+.burnout-output-wrapper {
+    margin-top: 1.5rem;
+    perspective: 1000px;
+}
+
+.prediction-card {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transform: rotateX(15deg);
+    opacity: 0;
+    transform-origin: top center;
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.prediction-card.show {
+    opacity: 1;
+    transform: rotateX(0deg);
+}
+
+.prediction-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    border: 2px solid var(--color-glass-border);
+}
+
+
+/* ==========================================================================
+   SMART STUDY PLANNER PAGE
+   ========================================================================== */
+.planner-interface-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.planner-board {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .planner-board {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 3D Calendar View */
+.isometric-calendar-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.calendar-header-day {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    position: relative;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.calendar-day:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.calendar-day.active {
+    background: rgba(var(--color-accent-rgb), 0.15);
+    border-color: rgba(var(--color-accent-rgb), 0.4);
+    font-weight: 600;
+}
+
+.calendar-day-dot {
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.dot-green { background: var(--color-accent); }
+.dot-blue { background: var(--color-accent-alt); }
+
+/* Task list cards */
+.planner-task-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.task-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.task-item-card {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.task-item-card:hover {
+    transform: translateX(4px);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.task-item-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.task-checkbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--color-glass-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.task-checkbox.checked {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.task-checkbox.checked::after {
+    content: '✓';
+    color: var(--color-bg);
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-title {
+    font-size: 0.88rem;
+    font-weight: 550;
+    transition: color var(--transition-fast);
+}
+
+.task-checkbox.checked + .task-details .task-title {
+    text-decoration: line-through;
+    color: var(--color-text-secondary);
+}
+
+.task-meta {
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.1rem;
+}
+
+.task-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.task-badge-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+/* Timeline Animation indicator */
+.planner-timeline-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.planner-timeline-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-alt) 100%);
+    width: 35%;
+    transition: width var(--transition-normal);
+}
+
+
+/* ==========================================================================
+   PREDICTIVE INSIGHTS PAGE
+   ========================================================================== */
+.predictive-insights-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.prediction-graph-card {
+    padding: 1.5rem;
+    height: 220px;
+    position: relative;
+}
+
+.future-timeline-card {
+    padding: 2rem 1.5rem;
+}
+
+.horizontal-timeline-track {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 3.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timeline-node {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 2px solid var(--color-text-secondary);
+    position: relative;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.timeline-node:hover, .timeline-node.active {
+    transform: scale(1.4);
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.6);
+}
+
+.timeline-node.critical {
+    border-color: #ef4444;
+}
+.timeline-node.critical:hover, .timeline-node.critical.active {
+    border-color: #ef4444;
+    background: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+}
+
+.node-label {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.timeline-node:hover .node-label, .timeline-node.active .node-label {
+    color: var(--color-text-primary);
+}
+
+.node-tooltip-card {
+    background: color-mix(in srgb, var(--color-glass-bg) 85%, #fff);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    min-height: 100px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.node-tooltip-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.tooltip-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.tooltip-risk {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+
+.risk-low { background: rgba(52, 211, 153, 0.12); color: #34d399; }
+.risk-med { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.risk-high { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+.tooltip-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Smart Study Planner Weekly Grid Workspace */
+.planner-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.85rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.planner-day-col {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 10px;
+    padding: 1rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 320px;
+    transition: all 0.5s ease;
+}
+
+.planner-day-header {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.5rem;
+    gap: 0.25rem;
+}
+
+.day-name {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.day-badge {
+    font-size: 0.64rem;
+    font-weight: 500;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+.status-optimal { background: rgba(82, 140, 111, 0.12); color: #34d399; }
+.status-moderate { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.status-congested { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+.planner-day-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.planner-task-card {
+    padding: 0.75rem 0.6rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--color-glass-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border-left: 3px solid var(--color-accent);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.planner-task-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.planner-task-card.priority-high { border-left-color: #ef4444; }
+.planner-task-card.priority-med { border-left-color: #f59e0b; }
+.planner-task-card.priority-low { border-left-color: #34d399; }
+
+.task-card-time {
+    font-size: 0.62rem;
+    color: var(--color-text-secondary);
+}
+
+.task-card-name {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+}
+
+.task-card-type {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.03em;
+}
+
+.planner-day-empty-text {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-top: 2rem;
+    opacity: 0.6;
+}
+
+/* Mood Analytics Dynamic States, Rings & Gradients */
+#mood-wave-card {
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    background: linear-gradient(180deg, rgba(82, 140, 111, 0.08) 0%, var(--color-bg) 85%);
+    transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mood-large-ring-box {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 76px;
+    height: 76px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mood-large-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.mood-large-ring .ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.03);
+    stroke-width: 5;
+}
+
+.mood-large-ring .ring-fill {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 264;
+    stroke-dashoffset: 66;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mood-large-ring-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    z-index: 11;
+}
+
+.mood-large-energy-pct {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.mood-large-energy-lbl {
+    font-size: 0.52rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* Mini energy rings inside selectors */
+.mood-mini-ring-box {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.mood-mini-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.mood-mini-ring .ring-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 3.5;
+}
+
+.mood-mini-ring .ring-fill {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-dasharray: 88;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fill-calm { stroke: #528c6f; }
+.fill-focused { stroke: #38bdf8; }
+.fill-fatigued { stroke: #f59e0b; }
+.fill-overloaded { stroke: #ef4444; }
+.fill-deepflow { stroke: #a855f7; }
+
+/* Selector buttons upgrades */
+.mood-btn {
+    border: 1px solid var(--color-glass-border);
+    padding: 1.25rem 0.5rem;
+    background: rgba(0, 0, 0, 0.015) !important;
+    transition: background 0.4s ease, border-color 0.4s ease, transform 0.2s ease !important;
+}
+
+.mood-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.mood-btn[data-mood="calm"].active {
+    background: linear-gradient(135deg, rgba(82, 140, 111, 0.15), rgba(255, 255, 255, 0.4)) !important;
+    border-color: rgba(82, 140, 111, 0.4) !important;
+    color: #1b7a4c !important;
+}
+
+.mood-btn[data-mood="focused"].active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(255, 255, 255, 0.4)) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+    color: #0284c7 !important;
+}
+
+.mood-btn[data-mood="fatigued"].active {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(255, 255, 255, 0.4)) !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    color: #b45309 !important;
+}
+
+.mood-btn[data-mood="overloaded"].active {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(255, 255, 255, 0.4)) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #b91c1c !important;
+}
+
+.mood-btn[data-mood="deepflow"].active {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(255, 255, 255, 0.4)) !important;
+    border-color: rgba(168, 85, 247, 0.4) !important;
+    color: #7c3aed !important;
+}
+
+.mood-energy-value {
+    font-size: 0.64rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.35rem;
+    font-weight: 500;
+}
+
+.mood-btn.active .mood-energy-value {
+    color: var(--color-text-primary);
+}
+
+@media (max-width: 992px) {
+    .planner-schedule-grid {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .planner-schedule-grid {
+        grid-template-columns: 1fr;
+    }
+    .planner-day-col {
+        min-height: auto;
+    }
+    .mood-selector-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .mood-btn[data-mood="deepflow"] {
+        grid-column: span 2;
+    }
+}
+
