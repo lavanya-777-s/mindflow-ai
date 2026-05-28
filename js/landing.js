@@ -27,15 +27,17 @@
                 const rotateX = -((y - yc) / yc) * 8;
                 const rotateY = ((x - xc) / xc) * 8;
                 
-                // Apply hardware-accelerated 3D transforms
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-                card.style.boxShadow = `0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(var(--color-accent-rgb), 0.08)`;
-                card.style.borderColor = 'rgba(var(--color-accent-rgb), 0.2)';
+                // Apply hardware-accelerated 3D transforms (including scaling up and lifting further)
+                card.style.transition = 'transform 0.1s ease, border-color 0.3s, box-shadow 0.3s';
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+                card.style.boxShadow = `0 20px 40px rgba(0, 0, 0, 0.45), 0 0 30px rgba(var(--color-accent-rgb), 0.25)`;
+                card.style.borderColor = 'rgba(255, 255, 255, 0.3)';
             });
             
             card.addEventListener('mouseleave', () => {
                 // Reset styling smoothly
-                card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+                card.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, box-shadow 0.3s';
+                card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)';
                 card.style.boxShadow = '';
                 card.style.borderColor = '';
             });
@@ -108,12 +110,41 @@
         });
     }
 
+    function setupInteractiveOrb() {
+        const scene = document.getElementById('hero-interactive-scene');
+        const orb = document.getElementById('hero-ai-orb');
+        if (!scene || !orb) return;
+
+        scene.addEventListener('mousemove', e => {
+            const rect = scene.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate relative offset from center (-0.5 to 0.5)
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            const dx = (x - xc) / xc;
+            const dy = (y - yc) / yc;
+
+            // Move the orb towards the cursor smoothly
+            orb.style.transform = `translate(${dx * 25}px, ${dy * 25}px) scale(1.05)`;
+            orb.style.boxShadow = `0 20px 50px rgba(115, 140, 255, 0.35), 0 0 40px rgba(115, 140, 255, 0.2)`;
+        });
+
+        scene.addEventListener('mouseleave', () => {
+            // Reset smoothly
+            orb.style.transform = 'translate(0px, 0px) scale(1)';
+            orb.style.boxShadow = '';
+        });
+    }
+
     // Expose Landing initializer globally
-    window.MindMapLanding = {
+    window.MindFlowLanding = {
         init: function() {
             setupFeatureCards();
             simulateLiveDashboard();
             setupChaosToClarity();
+            setupInteractiveOrb();
         },
         destroy: function() {
             if (statInterval) {

@@ -22,7 +22,7 @@
 
     // Theme color palettes
     const themeColors = {
-        'home': { primary: 'rgba(82, 140, 111, 0.12)', alt: 'rgba(200, 192, 180, 0.12)', spark: '#528c6f' },
+        'home': { primary: 'rgba(115, 140, 255, 0.03)', alt: 'rgba(115, 140, 255, 0.02)', spark: '#738cff' },
         'ai-companion': { primary: 'rgba(79, 70, 229, 0.12)', alt: 'rgba(139, 92, 246, 0.12)', spark: '#4f46e5' },
         'focus-tracking': { primary: 'rgba(107, 114, 128, 0.12)', alt: 'rgba(180, 176, 167, 0.12)', spark: '#6b7280' },
         'mood-analytics': { primary: 'rgba(168, 85, 247, 0.12)', alt: 'rgba(236, 72, 153, 0.12)', spark: '#a855f7' },
@@ -264,8 +264,41 @@
         init();
     });
 
+    // Global Button Ripple Effect
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.action-btn, .secondary-btn, .preset-btn, .mode-select-btn, .suggested-prompt-btn, #story-trigger-btn');
+        if (!btn) return;
+
+        // Ensure position relative for absolute positioning of ripple
+        if (window.getComputedStyle(btn).position === 'static') {
+            btn.style.position = 'relative';
+        }
+
+        // Create ripple element
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-wave';
+        
+        // Calculate size
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        
+        // Click position
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        btn.appendChild(ripple);
+        
+        // Remove after animation completes
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+
     // Expose background control APIs globally
-    window.MindMapEffects = {
+    window.MindFlowEffects = {
         init: function() {
             init();
             animate();
@@ -281,6 +314,6 @@
     };
 
     // Execute startup
-    window.MindMapEffects.init();
+    window.MindFlowEffects.init();
 
 })();

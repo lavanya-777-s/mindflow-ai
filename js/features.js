@@ -1,6 +1,6 @@
 /*
- * MindMap AI - Feature Page Modules
- * Handles full interactive scripting, simulations, dynamic canvas renderings, and timer lifecycles.
+ * MindFlow AI - Feature Page Modules
+ * Handles interactive scripting, AI simulation models, chatbot logic, timers, and the global AI Moment overlay.
  */
 
 (function () {
@@ -17,132 +17,228 @@
     }
 
     /* ==========================================================================
-       1. AI COMPANION SIMULATOR
+       GLOBAL STRONG AI MOMENT: CHAOS -> CLARITY TRANSFORMATION
        ========================================================================== */
-    function initAICompanion() {
-        const stressInput = document.getElementById('stress-input');
-        const stressVal = document.getElementById('stress-val');
-        const hoursInput = document.getElementById('hours-input');
-        const hoursVal = document.getElementById('hours-val');
-        const generateBtn = document.getElementById('generate-advice-btn');
-        const resetBtn = document.getElementById('reset-companion-btn');
-        const formDiv = document.getElementById('companion-form');
-        const resultsDiv = document.getElementById('companion-results');
-        const thinkingDiv = document.getElementById('thinking-indicator');
-        const resultsGrid = document.getElementById('results-grid');
-        
-        if (!stressInput || !generateBtn) return;
+    function runAIMoment(callback) {
+        const overlay = document.getElementById('ai-moment-overlay');
+        const statusText = document.getElementById('ai-moment-status');
+        const dot1 = document.getElementById('step-dot-1');
+        const dot2 = document.getElementById('step-dot-2');
+        const dot3 = document.getElementById('step-dot-3');
+        const fCards = document.querySelectorAll('.floating-ai-card');
 
-        // Sliders updates
-        stressInput.addEventListener('input', () => {
-            stressVal.textContent = stressInput.value;
+        if (!overlay || !statusText) {
+            // Fallback if elements not present
+            callback();
+            return;
+        }
+
+        // Show overlay
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+        statusText.textContent = "Analyzing workload...";
+        dot1.className = 'step-dot active';
+        dot2.className = 'step-dot';
+        dot3.className = 'step-dot';
+
+        // Phase 1: Chaos Layout (Scatter cards randomly)
+        fCards.forEach((card, index) => {
+            const rx = (Math.random() - 0.5) * 220; // -110px to 110px
+            const ry = (Math.random() - 0.5) * 120 - 40; // -100px to 20px
+            const rot = (Math.random() - 0.5) * 36; // -18deg to 18deg
+            card.style.transition = 'none';
+            card.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.9)`;
+            card.style.opacity = '0.85';
+            card.style.borderColor = 'rgba(255, 255, 255, 0.15)';
         });
 
-        hoursInput.addEventListener('input', () => {
-            hoursVal.textContent = hoursInput.value;
-        });
+        // Phase 2: AI Processing (Cards pull in towards the center orb and glow)
+        const t1 = setTimeout(() => {
+            statusText.textContent = "Detecting stress patterns...";
+            dot1.className = 'step-dot';
+            dot2.className = 'step-dot active';
 
-        // Advice generator click
-        generateBtn.addEventListener('click', () => {
-            // Read inputs
-            const stress = parseInt(stressInput.value);
-            const hours = parseInt(hoursInput.value);
-            const assignments = parseInt(document.getElementById('assignments-input').value) || 0;
-            const hackathons = parseInt(document.getElementById('hackathons-input').value) || 0;
-            const mood = document.getElementById('mood-input').value;
-            const botherText = document.getElementById('bother-input').value.trim();
+            fCards.forEach((card) => {
+                card.style.transition = 'transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.7s, border-color 0.7s';
+                card.style.transform = 'translate(0px, -20px) scale(0.8) rotate(0deg)';
+                card.style.opacity = '0.5';
+                card.style.borderColor = 'rgba(115, 140, 255, 0.4)';
+            });
+        }, 700);
 
-            // Toggle screens
-            formDiv.style.display = 'none';
-            resultsDiv.style.display = 'block';
-            thinkingDiv.style.display = 'flex';
-            resultsGrid.innerHTML = '';
+        // Phase 3: Clarity (Cards align into a clean horizontal structured row)
+        const t2 = setTimeout(() => {
+            statusText.textContent = "Generating recommendations...";
+            dot2.className = 'step-dot';
+            dot3.className = 'step-dot active';
 
-            // Simulated AI calculation delay
-            const delayTimer = setTimeout(() => {
-                thinkingDiv.style.display = 'none';
-                
-                // Formulate advice based on stats
-                let stressLevel = "Stable Flow";
-                let stressPct = 15;
-                if (stress > 7) {
-                    stressLevel = "High Burnout Alert";
-                    stressPct = 85;
-                } else if (stress > 4 || assignments > 4) {
-                    stressLevel = "Elevated Cognitive Load";
-                    stressPct = 55;
-                }
+            fCards.forEach((card, index) => {
+                card.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s, border-color 0.6s';
+                // Spread out horizontally in order
+                const offset = (index - 1.5) * 110;
+                card.style.transform = `translate(${offset}px, 60px) scale(0.95) rotate(0deg)`;
+                card.style.opacity = '1';
+                card.style.borderColor = 'rgba(52, 211, 153, 0.35)'; // Mint green border for clarity
+            });
+        }, 1400);
 
-                let recommendedAction = "";
-                if (stress > 7) {
-                    recommendedAction = `Your stress index is critical (${stress}/10) with ${assignments} deadlines pending. Immediately isolate your priority tasks. We advise canceling secondary milestones and deferring non-urgent submissions.`;
-                } else if (assignments > 3) {
-                    recommendedAction = `You have ${assignments} assignments stacked. Schedule sequential deep study blocks of 45 minutes using Vercel/Linear focus sprints to distribute workload.`;
-                } else {
-                    recommendedAction = `Current load levels look solid. Maintain a steady study pace and protect evening slots to preserve cognitive energy.`;
-                }
+        // End Moment and Reveal Results
+        const t3 = setTimeout(() => {
+            overlay.style.transition = 'opacity 0.3s ease';
+            overlay.style.opacity = '0';
+            
+            const tFade = setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.style.transition = '';
+                callback();
+            }, 300);
+            activeIntervals.push(tFade);
+        }, 2300);
 
-                let focusAdvice = "Engage a 25-minute Pomodoro block followed by a 5-minute breathing break.";
-                if (stress > 7) {
-                    focusAdvice = "Switch to a 15-minute high-focus interval with 10-minute active recovery breaks.";
-                } else if (mood === 'focused') {
-                    focusAdvice = "Engage a 50-minute deep flow block with a 10-minute integration break.";
-                }
-
-                let scheduleAdvice = "Block 9:00 AM - 11:30 AM tomorrow for deep reading. Avoid screens after 10 PM.";
-                if (hours > 8) {
-                    scheduleAdvice = "You've logged high study hours today. Suspend cognitive tasks for the next 4 hours and prioritize physical rest.";
-                }
-
-                const resultsData = [
-                    { title: "Stress Risk Diagnostics", content: `${stressLevel} (${stressPct}% Risk Indicator)` },
-                    { title: "Recommended Action Plan", content: recommendedAction },
-                    { title: "Suggested Focus Routine", content: focusAdvice },
-                    { title: "Adaptive Study Slot Plan", content: scheduleAdvice }
-                ];
-
-                // Append advice cards sequentially with slide-up reveal
-                resultsData.forEach((item, index) => {
-                    const adviceTimer = setTimeout(() => {
-                        const card = document.createElement('div');
-                        card.className = 'glass-card advice-card';
-                        card.innerHTML = `
-                            <div class="advice-title">${item.title}</div>
-                            <div class="advice-content" id="card-content-${index}"></div>
-                        `;
-                        resultsGrid.appendChild(card);
-                        
-                        // Force layout paint
-                        card.getBoundingClientRect();
-                        card.classList.add('show');
-                        
-                        // Run a premium typewriter effect for card content
-                        typeWriter(document.getElementById(`card-content-${index}`), item.content, 0);
-                        
-                    }, index * 800);
-                    activeIntervals.push(adviceTimer);
-                });
-
-            }, 1800);
-            activeIntervals.push(delayTimer);
-        });
-
-        resetBtn.addEventListener('click', () => {
-            resultsDiv.style.display = 'none';
-            formDiv.style.display = 'block';
-            resultsGrid.innerHTML = '';
-        });
+        activeIntervals.push(t1, t2, t3);
     }
 
-    // Typewriter utility for advice text
-    function typeWriter(element, text, index) {
-        if (index < text.length) {
-            element.innerHTML += text.charAt(index);
-            const charTimer = setTimeout(() => {
-                typeWriter(element, text, index + 1);
-            }, 15);
-            activeIntervals.push(charTimer);
+    // Metric counter increment upward animation
+    function animateCounter(element, targetValue, suffix = '', duration = 1200) {
+        if (!element) return;
+        let start = 0;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out quad
+            const easeProgress = progress * (2 - progress);
+            const currentValue = Math.floor(easeProgress * targetValue);
+            
+            element.textContent = currentValue + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                element.textContent = targetValue + suffix;
+            }
         }
+        requestAnimationFrame(update);
+    }
+
+
+    /* ==========================================================================
+       1. AI COMPANION SIMULATOR (MINI CHATBOT WITH QUICK ACTIONS)
+       ========================================================================== */
+    function initAICompanion() {
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-user-input');
+        const sendBtn = document.getElementById('chat-send-btn');
+        const prompts = document.querySelectorAll('.suggested-prompt-btn');
+        const actions = document.querySelectorAll('.quick-action-btn');
+
+        if (!chatMessages || !chatInput || !sendBtn) return;
+
+        function appendMessage(sender, text, isAssistant = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message ${isAssistant ? 'assistant' : 'user'}`;
+            msgDiv.innerHTML = `
+                <div class="message-sender" style="color: ${isAssistant ? 'var(--color-accent)' : 'var(--color-accent-alt)'}; font-weight:600; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.2rem; margin-top:0.6rem;">${sender}</div>
+                <div class="message-text" style="font-size:0.9rem; line-height:1.4;">${text}</div>
+            `;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function appendTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-message assistant typing-indicator-msg';
+            typingDiv.id = 'chat-typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="message-sender" style="color: var(--color-accent); font-weight:600; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.2rem; margin-top:0.6rem;">MindFlow AI</div>
+                <div class="companion-thinking" style="justify-content: flex-start; padding: 0.2rem 0;">
+                    <span class="thinking-dot" style="width:5px; height:5px;"></span>
+                    <span class="thinking-dot" style="width:5px; height:5px;"></span>
+                    <span class="thinking-dot" style="width:5px; height:5px;"></span>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('chat-typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        function generateAIResponse(userInput) {
+            appendTypingIndicator();
+
+            const query = userInput.toLowerCase();
+            let response = "";
+
+            if (query.includes('schedule') || query.includes('organize') || query.includes('study plan')) {
+                response = "I've structured a balanced study plan for tomorrow:<br><br>" +
+                           "• <b>09:00 AM - 10:30 AM:</b> Cognitive peak slot (Calculus quiz preparation)<br>" +
+                           "• <b>10:30 AM - 10:45 AM:</b> Screen-free hydration break<br>" +
+                           "• <b>11:00 AM - 12:30 PM:</b> Reading / Lab report drafting<br>" +
+                           "• <b>03:00 PM - 04:30 PM:</b> Revision sprint (Machine Learning lecture)<br><br>" +
+                           "<em>AI Recommendation: Protect your evening after 9:30 PM. Avoid screens to restore sleep cycles.</em>";
+            } else if (query.includes('stress') || query.includes('reduce') || query.includes('anxious') || query.includes('burnout')) {
+                response = "I detect elevated stress load. Let's trigger a physical reset:<br><br>" +
+                           "1. <b>Laptop Off:</b> Close your screens for the next 15 minutes.<br>" +
+                           "2. <b>Guided Breathing:</b> Inhale 4s, hold 4s, exhale 6s. Repeat 5 times.<br>" +
+                           "3. <b>Workload Reduction:</b> Pinpoint your single most urgent milestone. Defer secondary tasks. I will buffer your calendar slots.<br><br>" +
+                           "<em>AI Recommendation: Reduce workload by 15%. Take a recovery break.</em>";
+            } else if (query.includes('prioritize') || query.includes('tasks')) {
+                response = "Prioritization complete. Tasks are sorted by cognitive demand and deadlines:<br><br>" +
+                           "• <b>High Priority (Critical):</b> Calculus prep & Chemistry draft (Schedule for morning peak hours).<br>" +
+                           "• <b>Medium Priority (Moderate):</b> Machine Learning study sprint (Schedule for mid-afternoon).<br>" +
+                           "• <b>Low Priority (Buffer):</b> Course registrations & general readings (Schedule for late afternoon or block to buffer days).";
+            } else if (query.includes('optimize')) {
+                response = "Study routine optimized for neuro-efficiency:<br><br>" +
+                           "• <b>Spaced Sprints:</b> Block 45m deep focus slots followed by 10m active stretches.<br>" +
+                           "• <b>Subject Mixing:</b> Study different subjects between blocks to avoid cognitive saturation.<br>" +
+                           "• <b>Active Recall:</b> Spend the final 15 minutes of each block testing yourself without looking at notes.";
+            } else {
+                response = "I've analyzed your parameters. Based on your metrics, your current focus quotient is solid. " +
+                           "To sustain this, study in high-focus 25m sprints with 5m breaks. Ensure sleep debt stays below 2 hours.";
+            }
+
+            const responseTimer = setTimeout(() => {
+                removeTypingIndicator();
+                appendMessage("MindFlow AI", response, true);
+            }, 1100);
+
+            activeIntervals.push(responseTimer);
+        }
+
+        function handleSend() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            appendMessage("You", text, false);
+            chatInput.value = "";
+            generateAIResponse(text);
+        }
+
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        // Prompt Chips click
+        prompts.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const prompt = chip.getAttribute('data-prompt');
+                appendMessage("You", prompt, false);
+                generateAIResponse(prompt);
+            });
+        });
+
+        // Quick Actions click
+        actions.forEach(act => {
+            act.addEventListener('click', () => {
+                const action = act.getAttribute('data-action');
+                appendMessage("You", action, false);
+                generateAIResponse(action);
+            });
+        });
     }
 
 
@@ -158,17 +254,16 @@
         const resetBtn = document.getElementById('timer-reset-btn');
         const endBtn = document.getElementById('timer-end-btn');
         const messageBox = document.getElementById('focus-message');
-        const presetBtns = document.querySelectorAll('.preset-btn');
+        const modeBtns = document.querySelectorAll('.mode-select-btn');
         const applyCustomBtn = document.getElementById('apply-custom-timer');
 
         if (!display || !progressRing) return;
 
-        let totalDuration = 1500; // 25 mins in seconds
+        let totalDuration = 1500; // 25 mins
         let remaining = totalDuration;
         let timerId = null;
-        const strokeCircumference = 628; // Approx 2 * pi * r (r=100)
+        const strokeCircumference = 628;
 
-        // Progress ring setter
         function setProgressOffset(pct) {
             const offset = strokeCircumference - (pct * strokeCircumference);
             progressRing.style.strokeDashoffset = offset;
@@ -187,7 +282,6 @@
             }
             display.textContent = timeStr;
             
-            // Progress calculation
             const progress = remaining / totalDuration;
             setProgressOffset(progress);
         }
@@ -198,15 +292,8 @@
             startBtn.style.display = 'none';
             pauseBtn.style.display = 'block';
             endBtn.style.display = 'block';
-            statusText.textContent = "Flow Session Active";
-            messageBox.textContent = "Deep focus active. Minimize device distractions.";
-
-            // Calculate estimated end time
-            const endTime = new Date(Date.now() + remaining * 1000);
-            const endHours = endTime.getHours() % 12 || 12;
-            const endMins = endTime.getMinutes().toString().padStart(2, '0');
-            const ampm = endTime.getHours() >= 12 ? 'PM' : 'AM';
-            messageBox.textContent += ` Estimated end time: ${endHours}:${endMins} ${ampm}.`;
+            statusText.textContent = "Flow Active";
+            messageBox.textContent = "Deep focus state active. Keep device alerts muted.";
 
             timerId = setInterval(() => {
                 remaining--;
@@ -216,7 +303,7 @@
                     clearInterval(timerId);
                     timerId = null;
                     statusText.textContent = "Flow Complete";
-                    messageBox.textContent = "Session completed successfully. Stand up and stretch!";
+                    messageBox.textContent = "Session completed successfully. Take a physical stretch break!";
                     startBtn.style.display = 'block';
                     pauseBtn.style.display = 'none';
                     endBtn.style.display = 'none';
@@ -232,34 +319,34 @@
             timerId = null;
             startBtn.style.display = 'block';
             pauseBtn.style.display = 'none';
-            statusText.textContent = "Session Paused";
-            messageBox.textContent = "Timer paused. Resume when you're ready to focus.";
+            statusText.textContent = "Flow Paused";
+            messageBox.textContent = "Timer paused. Click start when ready to resume focus.";
         }
 
         function resetTimer() {
             pauseTimer();
             remaining = totalDuration;
             updateDisplay();
-            statusText.textContent = "Flow State Ready";
-            messageBox.textContent = "Ready to focus? Choose a duration and launch.";
+            statusText.textContent = "Flow Ready";
+            messageBox.textContent = "Choose your focus interval and start your sprint.";
             endBtn.style.display = 'none';
             setProgressOffset(1);
         }
 
-        // Preset buttons click
-        presetBtns.forEach(btn => {
+        // Mode switch
+        modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                presetBtns.forEach(p => p.classList.remove('active'));
+                modeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 totalDuration = parseInt(btn.getAttribute('data-time'));
                 resetTimer();
             });
         });
 
-        // Apply custom inputs
+        // Apply Custom setup
         if (applyCustomBtn) {
             applyCustomBtn.addEventListener('click', () => {
-                presetBtns.forEach(p => p.classList.remove('active'));
+                modeBtns.forEach(b => b.classList.remove('active'));
                 const hrs = parseInt(document.getElementById('custom-hours').value) || 0;
                 const mins = parseInt(document.getElementById('custom-minutes').value) || 0;
                 
@@ -276,10 +363,9 @@
         
         endBtn.addEventListener('click', () => {
             resetTimer();
-            messageBox.textContent = "Session terminated early. Rest logs saved.";
+            messageBox.textContent = "Session ended. Work progress recorded.";
         });
 
-        // Initial setup
         updateDisplay();
         setProgressOffset(1);
     }
@@ -289,59 +375,70 @@
        3. MOOD ANALYTICS WAVES
        ========================================================================== */
     function initMoodAnalytics() {
-        const moodBtns = document.querySelectorAll('.mood-btn');
+        const analyzeBtn = document.getElementById('analyze-mood-btn');
+        const moodSelect = document.getElementById('mood-select');
+        const energySlider = document.getElementById('energy-slider-input');
+        const energyDisplay = document.getElementById('energy-val-display');
+        const focusSlider = document.getElementById('focus-slider-input');
+        const focusDisplay = document.getElementById('focus-val-display');
+
         const activeLabel = document.getElementById('active-mood-display');
         const path1 = document.querySelector('.wave-p1');
         const path2 = document.querySelector('.wave-p2');
         const waveCard = document.getElementById('mood-wave-card');
         const largeRingFill = document.getElementById('large-ring-fill');
         const largeRingPct = document.getElementById('large-ring-pct');
- 
-        if (!moodBtns.length || !path1 || !path2 || !waveCard) return;
- 
-        // Wave parameters changed based on selection
+
+        if (!analyzeBtn || !energySlider) return;
+
+        // Sliders updates
+        energySlider.addEventListener('input', () => {
+            energyDisplay.textContent = energySlider.value;
+        });
+
+        focusSlider.addEventListener('input', () => {
+            focusDisplay.textContent = focusSlider.value;
+        });
+
         let amplitude = 12;
         let frequency = 0.02;
         let phase = 0;
         let speed = 0.03;
- 
-        // State configurations
+
         const stateConfigs = {
             calm: {
                 gradient: 'linear-gradient(180deg, rgba(82, 140, 111, 0.08) 0%, var(--color-bg) 85%)',
-                color: '#528c6f',
-                colorAlt: '#34d399'
+                color: '#528c6f', colorAlt: '#34d399', amp: 12, freq: 0.02, spd: 0.03
             },
             focused: {
                 gradient: 'linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, var(--color-bg) 85%)',
-                color: '#38bdf8',
-                colorAlt: '#60a5fa'
+                color: '#38bdf8', colorAlt: '#60a5fa', amp: 18, freq: 0.03, spd: 0.05
             },
             fatigued: {
                 gradient: 'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, var(--color-bg) 85%)',
-                color: '#f59e0b',
-                colorAlt: '#d97706'
+                color: '#f59e0b', colorAlt: '#d97706', amp: 6, freq: 0.01, spd: 0.015
             },
             overloaded: {
                 gradient: 'linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, var(--color-bg) 85%)',
-                color: '#ef4444',
-                colorAlt: '#ec4899'
+                color: '#ef4444', colorAlt: '#ec4899', amp: 28, freq: 0.05, spd: 0.08
             },
             deepflow: {
                 gradient: 'linear-gradient(180deg, rgba(168, 85, 247, 0.08) 0%, var(--color-bg) 85%)',
-                color: '#a855f7',
-                colorAlt: '#c084fc'
+                color: '#a855f7', colorAlt: '#c084fc', amp: 22, freq: 0.015, spd: 0.04
             }
         };
 
-        function setMoodState(moodType, label, energy, amp, freq, spd) {
-            amplitude = amp;
-            frequency = freq;
-            speed = spd;
+        function setMoodState(moodType, label, energy) {
+            const config = stateConfigs[moodType];
+            if (!config) return;
+
+            amplitude = config.amp;
+            frequency = config.freq;
+            speed = config.spd;
 
             activeLabel.textContent = label;
 
-            // Update energy rings
+            // Animate energy ring
             if (largeRingFill) {
                 const offset = 264 - (264 * (energy / 100));
                 largeRingFill.style.strokeDashoffset = offset;
@@ -351,71 +448,82 @@
                 largeRingPct.textContent = energy + '%';
             }
 
-            // Update Colors and Gradients
-            const config = stateConfigs[moodType];
-            if (config) {
+            // Update Colors
+            if (waveCard) {
                 waveCard.style.background = config.gradient;
                 waveCard.style.setProperty('--color-accent', config.color);
                 waveCard.style.setProperty('--color-accent-alt', config.colorAlt);
-                
-                if (largeRingFill) {
-                    largeRingFill.style.stroke = config.color;
-                }
+                if (largeRingFill) largeRingFill.style.stroke = config.color;
             }
-
-            // Bounce title
-            activeLabel.style.transform = 'scale(1.08)';
-            setTimeout(() => activeLabel.style.transform = 'scale(1)', 200);
         }
 
-        // Interactive log selector
-        moodBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                moodBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const moodType = btn.getAttribute('data-mood');
-                const label = btn.getAttribute('data-label');
-                const energy = parseInt(btn.getAttribute('data-energy'));
-                const amp = parseFloat(btn.getAttribute('data-amp'));
-                const freq = parseFloat(btn.getAttribute('data-freq'));
-                const spd = parseFloat(btn.getAttribute('data-speed'));
-
-                setMoodState(moodType, label, energy, amp, freq, spd);
-            });
-        });
- 
-        // Custom SVG Wave calculations loop (liquid dynamics)
+        // SVG wave loops
         function animateWaves() {
+            if (!path1 || !path2) return;
             phase += speed;
             const pointsCount = 40;
             const step = 400 / pointsCount;
             
             let d1 = "M 0 90";
             let d2 = "M 0 90";
- 
+
             for (let i = 0; i <= pointsCount; i++) {
                 const x = i * step;
-                // Calculate sine coordinates
                 const y1 = 90 + Math.sin(x * frequency + phase) * amplitude;
                 const y2 = 90 + Math.sin(x * (frequency * 1.2) - phase) * (amplitude * 0.8);
                 
                 d1 += ` L ${x} ${y1}`;
                 d2 += ` L ${x} ${y2}`;
             }
- 
-            // Close the paths for filled waves
+
             d1 += " L 400 180 L 0 180 Z";
             d2 += " L 400 180 L 0 180 Z";
- 
+
             path1.setAttribute('d', d1);
             path2.setAttribute('d', d2);
- 
+
             const frameId = requestAnimationFrame(animateWaves);
             activeRafs.push(frameId);
         }
- 
-        // Chart tooltip behavior
+
+        analyzeBtn.addEventListener('click', () => {
+            const mood = moodSelect.value;
+            const energy = parseInt(energySlider.value);
+            const focus = parseInt(focusSlider.value);
+            const moodLabel = moodSelect.options[moodSelect.selectedIndex].text.split(' ').slice(1).join(' ');
+
+            runAIMoment(() => {
+                setMoodState(mood, moodLabel, energy);
+                
+                // Redraw chart paths dynamically with variance
+                const trendPath = document.getElementById('mood-trend-path');
+                if (trendPath) {
+                    const basePoints = "M 20 80 L 70 50 L 120 40 L 170 85 L 220 90 L 270 30";
+                    const nextY = 120 - Math.round(focus * 0.9);
+                    trendPath.setAttribute('d', `${basePoints} L 320 ${nextY}`);
+                }
+
+                // Update dots info
+                const lastDot = document.querySelectorAll('.mood-chart-dot')[6];
+                if (lastDot) {
+                    lastDot.setAttribute('data-info', `Today: ${moodLabel} (Energy: ${energy}%, Focus: ${focus}%)`);
+                }
+
+                // Update insight text with specific reasoning
+                const insightText = document.getElementById('mood-insight-text');
+                if (insightText) {
+                    if (focus < 40) {
+                        insightText.innerHTML = `<strong>AI Diagnostics:</strong> Emotion Trend Generated. Energy Score: ${energy}% • Severe focus drop after study sprints. <em>Recommendation: Add short breaks between sessions.</em>`;
+                    } else if (energy > 80 && focus > 70) {
+                        insightText.innerHTML = `<strong>AI Diagnostics:</strong> Emotion Trend Generated. Energy Score: ${energy}% • High cognitive reserve and focus peaks. <em>Recommendation: Schedule deep study blocks of 45-60m.</em>`;
+                    } else {
+                        insightText.innerHTML = `<strong>AI Diagnostics:</strong> Emotion Trend Generated. Energy Score: ${energy}% • Workload stress is moderate. <em>Recommendation: Add short breaks between sessions.</em>`;
+                    }
+                }
+            });
+        });
+
+        // Initialize tooltips
         const dots = document.querySelectorAll('.mood-chart-dot');
         const tooltip = document.getElementById('chart-tooltip');
         if (dots.length && tooltip) {
@@ -430,9 +538,9 @@
                 });
             });
         }
- 
-        // Setup initial default calm state
-        setMoodState('calm', 'Calm', 75, 12, 0.02, 0.03);
+
+        // Render realistic defaults on load
+        setMoodState('calm', 'Calm', 75);
         animateWaves();
     }
 
@@ -445,113 +553,59 @@
         const sleepVal = document.getElementById('sleep-val-burn');
         const stressInput = document.getElementById('stress-input-burn');
         const stressVal = document.getElementById('stress-val-burn');
-        const deadlineInput = document.getElementById('deadlines-input-burn');
-        const deadlineVal = document.getElementById('deadlines-val-burn');
-        
+        const deadlinesInput = document.getElementById('deadlines-input-burn');
+        const deadlinesVal = document.getElementById('deadlines-val-burn');
+        const studyInput = document.getElementById('study-input-burn');
+        const studyVal = document.getElementById('study-val-burn');
+        const analyzeBtn = document.getElementById('analyze-burnout-btn');
+
         const scoreBadge = document.getElementById('burnout-score-badge');
         const riskLevel = document.getElementById('burnout-risk-level');
-        const riskText = document.getElementById('burnout-risk-text');
         const energyVal = document.getElementById('burnout-energy-val');
         const energyBar = document.getElementById('burnout-energy-bar');
+        const contributorsList = document.getElementById('burnout-contributors-list');
+        const recommendationsList = document.getElementById('burnout-recommendations-list');
+        const ringFill = document.getElementById('burnout-ring-fill');
+        const resultsCard = document.getElementById('burnout-results-card');
 
         const canvas = document.getElementById('brain-canvas');
 
-        if (!sleepInput || !canvas) return;
+        if (!sleepInput || !canvas || !analyzeBtn) return;
 
-        // Calculation variables
-        let sleep = parseFloat(sleepInput.value);
-        let stress = parseInt(stressInput.value);
-        let deadlines = parseInt(deadlineInput.value);
-        
-        let burnoutRisk = 42; // default
-        let nodeActivitySpeed = 1.0; // scales canvas blinks
+        // Sliders updates
+        sleepInput.addEventListener('input', () => { sleepVal.textContent = sleepInput.value; });
+        stressInput.addEventListener('input', () => { stressVal.textContent = stressInput.value; });
+        deadlinesInput.addEventListener('input', () => { deadlinesVal.textContent = deadlinesInput.value; });
+        studyInput.addEventListener('input', () => { studyVal.textContent = studyInput.value; });
 
-        // Canvas context setup
+        // Brain Mesh Context
         const ctx = canvas.getContext('2d');
         const cWidth = (canvas.width = 260);
         const cHeight = (canvas.height = 220);
 
-        // Define brain profile coordinates nodes
         const brainNodes = [
-            { x: 70, y: 110, pulseOffset: 0 },   // Frontal pole
+            { x: 70, y: 110, pulseOffset: 0 },
             { x: 90, y: 70, pulseOffset: 0.5 },
-            { x: 130, y: 55, pulseOffset: 1.2 },  // Superior parietal
-            { x: 180, y: 75, pulseOffset: 0.8 },  // Occipital
+            { x: 130, y: 55, pulseOffset: 1.2 },
+            { x: 180, y: 75, pulseOffset: 0.8 },
             { x: 200, y: 110, pulseOffset: 2.1 },
-            { x: 170, y: 140, pulseOffset: 1.5 }, // Cerebellum
-            { x: 130, y: 170, pulseOffset: 0.3 }, // Stem
-            { x: 100, y: 140, pulseOffset: 1.9 }, // Temporal
-            { x: 120, y: 100, pulseOffset: 0.9 }, // Midbrain
+            { x: 170, y: 140, pulseOffset: 1.5 },
+            { x: 130, y: 170, pulseOffset: 0.3 },
+            { x: 100, y: 140, pulseOffset: 1.9 },
+            { x: 120, y: 100, pulseOffset: 0.9 },
             { x: 150, y: 110, pulseOffset: 1.4 },
             { x: 140, y: 80, pulseOffset: 2.4 },
             { x: 110, y: 75, pulseOffset: 1.7 }
         ];
 
-        // Sliders triggers
-        sleepInput.addEventListener('input', () => {
-            sleep = parseFloat(sleepInput.value);
-            sleepVal.textContent = sleep;
-            calculateBurnout();
-        });
+        let burnoutRisk = 42; // default
+        let nodeActivitySpeed = 1.0;
 
-        stressInput.addEventListener('input', () => {
-            stress = parseInt(stressInput.value);
-            stressVal.textContent = stress;
-            calculateBurnout();
-        });
-
-        deadlineInput.addEventListener('input', () => {
-            deadlines = parseInt(deadlineInput.value);
-            deadlineVal.textContent = deadlines;
-            calculateBurnout();
-        });
-
-        // Perform prediction mechanics
-        function calculateBurnout() {
-            // Formula: high stress & deadlines increase risk, high sleep decreases risk
-            burnoutRisk = Math.round((stress * 6.5) + (deadlines * 5.5) - (sleep * 4.5) + 30);
-            
-            // Constrain 5% to 95%
-            burnoutRisk = Math.max(5, Math.min(95, burnoutRisk));
-            
-            // Update visual text states
-            scoreBadge.textContent = `${burnoutRisk}%`;
-            
-            // Calculate energy level (inversed risk)
-            const energy = Math.max(100 - burnoutRisk, 8);
-            energyVal.textContent = `${energy}%`;
-            energyBar.style.width = `${energy}%`;
-
-            // Adjust bar colors based on levels
-            energyBar.className = 'progress-bar-fill';
-            if (burnoutRisk > 70) {
-                energyBar.classList.add('critical');
-                riskLevel.textContent = "Critical Burnout Risk";
-                riskLevel.style.color = "#ef4444";
-                riskText.textContent = "Workload exceeds mental margins. Immediately reduce tasks and prioritize rest.";
-                nodeActivitySpeed = 3.5; // frantic blinking
-            } else if (burnoutRisk > 40) {
-                energyBar.classList.add('warning');
-                riskLevel.textContent = "Elevated Fatigue Alert";
-                riskLevel.style.color = "#f59e0b";
-                riskText.textContent = "Moderate cognitive strain. Consider scheduling buffer tasks and protecting sleep.";
-                nodeActivitySpeed = 1.8; // active blinking
-            } else {
-                energyBar.classList.add('normal');
-                riskLevel.textContent = "Optimal Flow Stable";
-                riskLevel.style.color = "var(--color-accent)";
-                riskText.textContent = "Mental metrics are steady. Maintain present work-rest ratios.";
-                nodeActivitySpeed = 0.8; // calm pulse
-            }
-        }
-
-        // Draw brain connections and nodes
-        let animTime = 0;
-        function drawBrainVisual() {
+        function runBrainVisuals() {
             ctx.clearRect(0, 0, cWidth, cHeight);
-            animTime += 0.05 * nodeActivitySpeed;
+            const animTime = performance.now() * 0.001 * nodeActivitySpeed;
 
-            // 1. Draw connection filaments
+            // Draw connections
             ctx.strokeStyle = burnoutRisk > 70 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(var(--color-accent-rgb), 0.12)';
             ctx.lineWidth = 1.2;
             for (let i = 0; i < brainNodes.length; i++) {
@@ -560,7 +614,6 @@
                     const dy = brainNodes[i].y - brainNodes[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     
-                    // Connect nodes within proximity
                     if (dist < 80) {
                         ctx.beginPath();
                         ctx.moveTo(brainNodes[i].x, brainNodes[i].y);
@@ -570,13 +623,11 @@
                 }
             }
 
-            // 2. Draw blinking nodes
+            // Draw nodes
             brainNodes.forEach(node => {
-                // Pulse size
                 const pulse = Math.abs(Math.sin(animTime + node.pulseOffset));
                 const glowRad = 3 + pulse * 7;
                 
-                // Glow circles
                 const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, glowRad);
                 if (burnoutRisk > 70) {
                     grad.addColorStop(0, 'rgba(239, 68, 68, 0.8)');
@@ -594,26 +645,106 @@
                 ctx.arc(node.x, node.y, glowRad, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Core dot
                 ctx.fillStyle = burnoutRisk > 70 ? '#ef4444' : (burnoutRisk > 40 ? '#f59e0b' : 'var(--color-text-primary)');
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, 2.5, 0, Math.PI * 2);
                 ctx.fill();
             });
 
-            // Pulse card visibility initially
-            const card = document.getElementById('burnout-results-card');
-            if (card && !card.classList.contains('show')) {
-                card.classList.add('show');
-            }
-
-            const frameId = requestAnimationFrame(drawBrainVisual);
+            const frameId = requestAnimationFrame(runBrainVisuals);
             activeRafs.push(frameId);
         }
 
-        // Initialize view calculation
-        calculateBurnout();
-        drawBrainVisual();
+        function renderResults(calculatedRisk, sleepVal, stressVal, deadlinesVal, studyVal) {
+            burnoutRisk = calculatedRisk;
+            
+            // Set ring offset: 264 is full stroke-dasharray
+            if (ringFill) {
+                const offset = 264 - (264 * (burnoutRisk / 100));
+                ringFill.style.strokeDashoffset = offset;
+            }
+
+            // Update badge text
+            animateCounter(scoreBadge, burnoutRisk, '%');
+
+            // Update energy
+            const energy = Math.max(100 - burnoutRisk, 8);
+            if (energyVal) animateCounter(energyVal, energy, '%');
+            if (energyBar) {
+                energyBar.style.width = `${energy}%`;
+                energyBar.className = 'progress-bar-fill';
+            }
+
+            if (burnoutRisk > 70) {
+                if (energyBar) energyBar.classList.add('critical');
+                riskLevel.textContent = "Critical Burnout Risk";
+                riskLevel.style.color = "#ef4444";
+                if (ringFill) ringFill.style.stroke = '#ef4444';
+                nodeActivitySpeed = 3.5;
+            } else if (burnoutRisk > 40) {
+                if (energyBar) energyBar.classList.add('warning');
+                riskLevel.textContent = "Elevated Fatigue Alert";
+                riskLevel.style.color = "#f59e0b";
+                if (ringFill) ringFill.style.stroke = '#f59e0b';
+                nodeActivitySpeed = 1.8;
+            } else {
+                if (energyBar) energyBar.classList.add('normal');
+                riskLevel.textContent = "Optimal Flow Stable";
+                riskLevel.style.color = "var(--color-accent)";
+                if (ringFill) ringFill.style.stroke = 'var(--color-accent)';
+                nodeActivitySpeed = 0.8;
+            }
+
+            // Generate specific reasoning contributor items
+            let contributors = [];
+            if (sleepVal < 7.0) contributors.push("• Sleep deficit");
+            if (deadlinesVal > 3) contributors.push("• Assignment overload");
+            if (stressVal > 6) contributors.push("• High stress level");
+            if (studyVal > 8) contributors.push("• Study duration peaks");
+            if (contributors.length === 0) contributors.push("• Load metrics balanced");
+
+            contributorsList.innerHTML = contributors.map(item => `<li>${item}</li>`).join('');
+
+            // Generate recommendations
+            let recs = [];
+            if (burnoutRisk > 60) {
+                recs.push("• Reduce workload by 15%");
+                recs.push("• Take a recovery break");
+                recs.push("• Prioritize important tasks");
+            } else if (burnoutRisk > 35) {
+                recs.push("• Buffer task schedules");
+                recs.push("• Ensure regular rest blocks");
+                recs.push("• Use Pomodoro focus mode");
+            } else {
+                recs.push("• Maintain present pacing");
+                recs.push("• Standardize sleep schedules");
+            }
+            recommendationsList.innerHTML = recs.map(item => `<li>${item}</li>`).join('');
+
+            // Add the 'show' class to display the results card
+            if (resultsCard) {
+                resultsCard.classList.add('show');
+            }
+        }
+
+        analyzeBtn.addEventListener('click', () => {
+            const sleep = parseFloat(sleepInput.value);
+            const stress = parseInt(stressInput.value);
+            const deadlines = parseInt(deadlinesInput.value);
+            const study = parseFloat(studyInput.value);
+
+            // Burnout algorithm
+            const calculatedRisk = Math.round((stress * 6.5) + (deadlines * 5.5) + (study * 2) - (sleep * 5.5) + 30);
+            const constrainedRisk = Math.max(5, Math.min(95, calculatedRisk));
+
+            runAIMoment(() => {
+                renderResults(constrainedRisk, sleep, stress, deadlines, study);
+            });
+        });
+
+        // Initial default state rendering on load
+        renderResults(42, 7.5, 5, 3, 6);
+        runBrainVisuals();
     }
 
 
@@ -622,165 +753,96 @@
        ========================================================================== */
     function initStudyPlanner() {
         const generateBtn = document.getElementById('planner-generate-btn');
-        const assignmentsInput = document.getElementById('planner-assignments-input');
-        const hackathonsInput = document.getElementById('planner-hackathons-input');
-        const hoursInput = document.getElementById('planner-hours-input');
-        
-        const emptyState = document.getElementById('planner-empty');
-        const loaderState = document.getElementById('planner-loader');
-        const loaderText = document.getElementById('planner-loader-text');
+        const tasksInput = document.getElementById('planner-tasks-input');
+        const deadlineInput = document.getElementById('planner-deadline-input');
+        const priorityInput = document.getElementById('planner-priority-input');
+        const daysVal = document.getElementById('planner-days-val');
+
         const gridState = document.getElementById('planner-schedule-grid');
+        const breakdownText = document.getElementById('planner-breakdown-text');
 
-        if (!generateBtn || !emptyState || !loaderState || !gridState) return;
+        if (!generateBtn || !gridState) return;
 
-        generateBtn.addEventListener('click', () => {
-            const A = Math.max(0, parseInt(assignmentsInput.value) || 0);
-            const H = Math.max(0, parseInt(hackathonsInput.value) || 0);
-            const W = Math.max(1, parseInt(hoursInput.value) || 0);
+        // Slider value display
+        deadlineInput.addEventListener('input', () => {
+            daysVal.textContent = deadlineInput.value;
+        });
 
-            // Toggle screens
-            emptyState.style.display = 'none';
-            gridState.style.display = 'none';
-            loaderState.style.display = 'flex';
-            loaderText.textContent = 'Analyzing deadline congestion...';
-
-            // Phase loader sequence
-            let timer1 = setTimeout(() => {
-                loaderText.textContent = 'Allocating active focus blocks...';
-            }, 600);
+        function populateSchedule(daysCount, priority, tasksList) {
+            gridState.innerHTML = '';
+            const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
             
-            let timer2 = setTimeout(() => {
-                loaderText.textContent = 'Integrating sleep recovery buffers...';
-            }, 1200);
-
-            let timer3 = setTimeout(() => {
-                loaderState.style.display = 'none';
-                gridState.style.display = 'grid';
+            weekDays.forEach((day, index) => {
+                const dayCol = document.createElement('div');
+                dayCol.className = 'planner-day-col';
+                dayCol.style.opacity = '1';
+                dayCol.style.transform = 'none';
                 
-                // Build dynamic daily tasks
-                const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                gridState.innerHTML = '';
+                let tasksHtml = "";
+                let dailyHours = 0;
 
-                // Calculate daily parameters
-                const dailyHours = Math.round((W / 7) * 10) / 10;
-                
-                days.forEach((day, index) => {
-                    let tasks = [];
-                    let activeHours = 0;
-                    
-                    // Task assignment rules
-                    if (index === 0) { // Monday
-                        tasks.push({ time: '09:00 AM', name: 'Calculus Quiz Prep', type: 'Focus', priority: 'high' });
-                        activeHours += 2;
-                        if (A >= 1) {
-                            tasks.push({ time: '01:00 PM', name: 'Assignment 1 Coding', type: 'Work', priority: 'med' });
-                            activeHours += 2;
-                        }
-                    } else if (index === 1) { // Tuesday
-                        if (A >= 2) {
-                            tasks.push({ time: '10:00 AM', name: 'Chemistry Lab Draft', type: 'Work', priority: 'high' });
-                            activeHours += 2.5;
-                        }
-                        tasks.push({ time: '03:00 PM', name: 'Review Lecture Stats', type: 'Review', priority: 'low' });
-                        activeHours += 1;
-                    } else if (index === 2) { // Wednesday
-                        if (A >= 3) {
-                            tasks.push({ time: '11:00 AM', name: 'History Essay Outline', type: 'Work', priority: 'med' });
-                            activeHours += 2;
-                        }
-                        tasks.push({ time: '04:00 PM', name: 'Focus Sprint pomodoro', type: 'Focus', priority: 'low' });
-                        activeHours += 1.5;
-                    } else if (index === 3) { // Thursday
-                        if (A >= 4) {
-                            tasks.push({ time: '09:00 AM', name: 'Physics Problem Sheet', type: 'Work', priority: 'high' });
-                            activeHours += 3;
-                        }
-                        tasks.push({ time: '02:00 PM', name: 'Syllabus Synapse Sync', type: 'Review', priority: 'low' });
-                        activeHours += 1;
-                    } else if (index === 4) { // Friday
-                        if (A >= 5) {
-                            tasks.push({ time: '10:00 AM', name: 'Coding Lab Submission', type: 'Work', priority: 'high' });
-                            activeHours += 2.5;
-                        } else {
-                            tasks.push({ time: '02:00 PM', name: 'Buffer Rest Window', type: 'Decompress', priority: 'low' });
-                            activeHours += 1;
-                        }
-                    } else if (index === 5) { // Saturday
-                        if (H >= 1) {
-                            tasks.push({ time: '09:00 AM', name: 'Hackathon Phase 1 Build', type: 'Hackathon', priority: 'high' });
-                            activeHours += 5;
-                        } else {
-                            tasks.push({ time: '10:00 AM', name: 'Deep Work Side Project', type: 'Focus', priority: 'med' });
-                            activeHours += 3;
-                        }
-                    } else if (index === 6) { // Sunday
-                        if (H >= 2) {
-                            tasks.push({ time: '10:00 AM', name: 'Hackathon Pitch Draft', type: 'Hackathon', priority: 'high' });
-                            activeHours += 4;
-                        }
-                        tasks.push({ time: '04:00 PM', name: 'Sleep Recovery Buffer', type: 'Decompress', priority: 'low' });
-                        activeHours += 2;
-                    }
-
-                    // Constrain active hours display to study hours input dynamically
-                    const dayHoursDisplay = Math.min(activeHours, Math.round(dailyHours * 10) / 10);
-                    let congestionClass = 'status-optimal';
-                    let congestionText = 'Optimal';
-                    if (dayHoursDisplay > 4) {
-                        congestionClass = 'status-congested';
-                        congestionText = 'Congested';
-                    } else if (dayHoursDisplay > 2.5) {
-                        congestionClass = 'status-moderate';
-                        congestionText = 'Moderate';
-                    }
-
-                    // Build tasks HTML
-                    let tasksHtml = '';
-                    if (tasks.length === 0) {
-                        tasksHtml = `<div class="planner-day-empty-text">Rest & Recovery</div>`;
-                    } else {
-                        tasks.forEach(task => {
-                            tasksHtml += `
-                                <div class="planner-task-card priority-${task.priority}">
-                                    <div class="task-card-time">${task.time}</div>
-                                    <div class="task-card-name">${task.name}</div>
-                                    <div class="task-card-type">${task.type}</div>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    const dayCol = document.createElement('div');
-                    dayCol.className = 'planner-day-col';
-                    dayCol.style.opacity = '0';
-                    dayCol.style.transform = 'translateY(15px)';
-                    dayCol.innerHTML = `
-                        <div class="planner-day-header">
-                            <span class="day-name">${day}</span>
-                            <span class="day-badge ${congestionClass}">${dayHoursDisplay}h (${congestionText})</span>
-                        </div>
-                        <div class="planner-day-tasks">
-                            ${tasksHtml}
+                if (index < daysCount) {
+                    const taskToAssign = tasksList[index % tasksList.length];
+                    dailyHours = priority === 'high' ? 4 : (priority === 'med' ? 2.5 : 1.5);
+                    tasksHtml = `
+                        <div class="planner-task-card priority-${priority}" style="transform:none; opacity:1;">
+                            <div class="task-card-time">09:00 AM</div>
+                            <div class="task-card-name">${taskToAssign}</div>
+                            <div class="task-card-type">${priority === 'high' ? 'Deep Focus' : 'Study Sprint'}</div>
                         </div>
                     `;
-                    gridState.appendChild(dayCol);
-                });
+                } else {
+                    tasksHtml = `<div class="planner-day-empty-text">Rest & Recovery Slot</div>`;
+                }
 
-                // Stagger columns entrance animation
-                const cols = document.querySelectorAll('.planner-day-col');
-                cols.forEach((col, idx) => {
-                    let delayTimer = setTimeout(() => {
-                        col.style.opacity = '1';
-                        col.style.transform = 'translateY(0)';
-                        col.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-                    }, idx * 80);
-                    activeIntervals.push(delayTimer);
-                });
+                let congestionClass = 'status-optimal';
+                let congestionText = 'Optimal';
+                if (dailyHours > 3) {
+                    congestionClass = 'status-congested';
+                    congestionText = 'High Load';
+                } else if (dailyHours > 0) {
+                    congestionClass = 'status-moderate';
+                    congestionText = 'Moderate';
+                }
 
-            }, 1700);
+                dayCol.innerHTML = `
+                    <div class="planner-day-header">
+                        <span class="day-name">${day}</span>
+                        <span class="day-badge ${congestionClass}">${dailyHours}h (${congestionText})</span>
+                        <div class="indicator-ring-mini" style="width:10px; height:10px; border-radius:50%; background: ${dailyHours > 3 ? '#ef4444' : (dailyHours > 0 ? '#f59e0b' : '#528c6f')}; margin-top:2px;"></div>
+                    </div>
+                    <div class="planner-day-tasks">
+                        ${tasksHtml}
+                    </div>
+                `;
 
-            activeIntervals.push(timer1, timer2, timer3);
+                gridState.appendChild(dayCol);
+            });
+
+            // Set breakdown text details
+            const studyHoursTotal = daysCount * (priority === 'high' ? 4 : (priority === 'med' ? 2.5 : 1.5));
+            breakdownText.innerHTML = `Today's Schedule Ready. Generated a balanced study plan over <b>${daysCount} days</b>. ` +
+                                      `A total of <b>${studyHoursTotal} study hours</b> were distributed into optimal focus sprints. ` +
+                                      `Remaining buffer slots are mapped to ensure cognitive recovery.`;
+        }
+
+        generateBtn.addEventListener('click', () => {
+            const rawTasks = tasksInput.value.trim();
+            const daysCount = parseInt(deadlineInput.value);
+            const priority = priorityInput.value;
+
+            let tasksList = rawTasks ? rawTasks.split('\n').filter(t => t.trim()) : [];
+            if (tasksList.length === 0) {
+                tasksList = ["Calculus Homework prep", "Lab Report write-up", "Machine Learning lecture revision"];
+            }
+
+            runAIMoment(() => {
+                populateSchedule(daysCount, priority, tasksList);
+            });
         });
+
+        // Render realistic defaults on load
+        populateSchedule(3, 'med', ["Calculus Homework prep", "Lab Report write-up", "Machine Learning lecture revision"]);
     }
 
 
@@ -788,56 +850,101 @@
        6. PREDICTIVE INSIGHTS TIMELINE
        ========================================================================== */
     function initPredictiveInsights() {
+        const forecastBtn = document.getElementById('forecast-btn');
+        const weekSelect = document.getElementById('predictive-week-select');
+        const resultsPanel = document.getElementById('predictive-results-panel');
+
         const nodes = document.querySelectorAll('.timeline-node');
         const tooltip = document.getElementById('timeline-tooltip');
         const tTitle = document.getElementById('tooltip-title');
         const tRisk = document.getElementById('tooltip-risk');
         const tDesc = document.getElementById('tooltip-desc');
 
-        if (!nodes.length || !tooltip) return;
+        const riskLvlText = document.getElementById('predictive-risk-level');
+        const peakDaysText = document.getElementById('predictive-peak-days');
+        const recsText = document.getElementById('predictive-recs');
 
+        if (!forecastBtn || !resultsPanel) return;
+
+        const forecastData = {
+            '1': { risk: 'Low', peak: 'None', recs: 'Maintain present pacing. Sleep indices look stable.', nodeIdx: 0 },
+            '4': { risk: 'Low', peak: 'Wednesday', recs: 'Early project releases. Focus slots will preserve cognitive load.', nodeIdx: 0 },
+            '8': { risk: 'High', peak: 'Tuesday, Thursday', recs: 'Shift non-urgent tasks. Defer secondary milestones.', nodeIdx: 1 },
+            '12': { risk: 'Medium', peak: 'Monday, Friday', recs: 'Buffer tasks list. Block 15m screen recovery slots.', nodeIdx: 2 },
+            '15': { risk: 'High', peak: 'Tuesday, Thursday', recs: 'Finals cycle. Prioritize sleep recovery buffers.', nodeIdx: 3 },
+            '18': { risk: 'Low', peak: 'None', recs: 'Semester evaluation stable. Recover rest hours.', nodeIdx: 3 }
+        };
+
+        function setForecast(week) {
+            const data = forecastData[week];
+            if (!data) return;
+
+            riskLvlText.textContent = data.risk;
+            riskLvlText.style.color = data.risk === 'High' ? '#ef4444' : (data.risk === 'Medium' ? '#f59e0b' : 'var(--color-accent)');
+            peakDaysText.textContent = data.peak;
+            recsText.innerHTML = `AI Recommendation: <em>${data.recs}</em>`;
+
+            // Timelines select node
+            nodes.forEach(n => n.classList.remove('active'));
+            const activeNode = nodes[data.nodeIdx];
+            if (activeNode) {
+                activeNode.classList.add('active');
+                
+                const title = activeNode.getAttribute('data-title');
+                const risk = activeNode.getAttribute('data-risk');
+                const desc = activeNode.getAttribute('data-desc');
+
+                tTitle.textContent = title;
+                tDesc.textContent = desc;
+                tRisk.textContent = `${risk.toUpperCase()} RISK`;
+                tRisk.className = 'tooltip-risk';
+                if (risk === 'low') tRisk.classList.add('risk-low');
+                else if (risk === 'med') tRisk.classList.add('risk-med');
+                else tRisk.classList.add('risk-high');
+            }
+        }
+
+        forecastBtn.addEventListener('click', () => {
+            const selectedWeek = weekSelect.value;
+            runAIMoment(() => {
+                setForecast(selectedWeek);
+            });
+        });
+
+        // Timeline node clicks
         nodes.forEach(node => {
             node.addEventListener('click', () => {
                 nodes.forEach(n => n.classList.remove('active'));
                 node.classList.add('active');
 
-                // Read milestone specs
                 const title = node.getAttribute('data-title');
                 const risk = node.getAttribute('data-risk');
                 const desc = node.getAttribute('data-desc');
 
-                // Transition tooltip out then in
                 tooltip.classList.remove('show');
-                
                 const tooltipTimer = setTimeout(() => {
                     tTitle.textContent = title;
                     tDesc.textContent = desc;
-
-                    // Set risk level tags
                     tRisk.textContent = `${risk.toUpperCase()} RISK`;
                     tRisk.className = 'tooltip-risk';
-                    if (risk === 'low') {
-                        tRisk.classList.add('risk-low');
-                    } else if (risk === 'med') {
-                        tRisk.classList.add('risk-med');
-                    } else {
-                        tRisk.classList.add('risk-high');
-                    }
-
+                    if (risk === 'low') tRisk.classList.add('risk-low');
+                    else if (risk === 'med') tRisk.classList.add('risk-med');
+                    else tRisk.classList.add('risk-high');
                     tooltip.classList.add('show');
                 }, 200);
                 activeIntervals.push(tooltipTimer);
             });
         });
+
+        // Load default on page load
+        setForecast('1');
     }
 
     // Main Exporter
-    window.MindMapFeatures = {
+    window.MindFlowFeatures = {
         init: function (route) {
-            // Clean up any frames before firing a new scene
             cleanupLoops();
 
-            // Setup appropriate feature components
             if (route === '/ai-companion') {
                 initAICompanion();
             } else if (route === '/focus-tracking') {

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindMap AI | Understand Your Workload Before Burnout Begins</title>
-    <meta name="description" content="An AI-powered student companion that analyzes workload, detects stress patterns, and creates smarter study plans before productivity drops.">
+    <title>MindFlow AI | Understand Your Workload Before Burnout Begins</title>
+    <meta name="description" content="MindFlow AI analyzes workload, stress patterns, and productivity behavior to create smarter study experiences.">
     
     <!-- Premium Fonts from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +55,7 @@
         <div class="nav-container">
             <div class="nav-breadcrumbs" id="nav-breadcrumbs">
                 <!-- Dynamically populated by router.js -->
-                <a href="/" class="breadcrumb-link" id="breadcrumb-home">MindMap AI</a>
+                <a href="/" class="breadcrumb-link" id="breadcrumb-home">MindFlow AI</a>
             </div>
             <div class="nav-actions" id="nav-actions">
                 <a href="/ai-companion" class="nav-cta-link" data-route="/ai-companion">Start Journey</a>
@@ -67,6 +67,34 @@
     <main id="app" class="app-container">
         <!-- Content will be injected dynamically by router.js -->
     </main>
+
+    <!-- Global AI Moment Overlay (Chaos to Clarity) -->
+    <div id="ai-moment-overlay" class="ai-moment-overlay" style="display: none;">
+        <div class="ai-moment-content">
+            <!-- Pulsing central orb -->
+            <div class="ai-moment-orb-wrapper">
+                <div class="ai-moment-orb-ring"></div>
+                <div class="ai-moment-orb"></div>
+            </div>
+            
+            <!-- Floating chaotic task cards -->
+            <div class="chaos-cards-container" id="chaos-cards-container">
+                <div class="floating-ai-card" id="fcard-1">📝 Assignments</div>
+                <div class="floating-ai-card" id="fcard-2">🚀 Hackathons</div>
+                <div class="floating-ai-card" id="fcard-3">📅 Deadlines</div>
+                <div class="floating-ai-card" id="fcard-4">⚡ Stress Levels</div>
+            </div>
+
+            <div class="ai-moment-text-container">
+                <div class="ai-moment-status" id="ai-moment-status">Analyzing workload...</div>
+                <div class="ai-moment-steps">
+                    <span class="step-dot active" id="step-dot-1"></span>
+                    <span class="step-dot" id="step-dot-2"></span>
+                    <span class="step-dot" id="step-dot-3"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script type="module" src="js/effects.js"></script>
