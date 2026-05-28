@@ -1124,3 +1124,182 @@
     color: var(--color-text-primary);
     font-family: var(--font-heading);
 }
+
+/* Mood cards row & buttons styling */
+.mood-cards-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.mood-card-btn {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 12px;
+    padding: 0.45rem 0.85rem;
+    cursor: pointer;
+    backdrop-filter: blur(var(--blur-strength));
+    -webkit-backdrop-filter: blur(var(--blur-strength));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    position: relative;
+}
+
+.mood-card-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: rgba(var(--color-accent-rgb), 0.5);
+    color: var(--color-text-primary);
+    box-shadow: 0 6px 20px rgba(var(--color-accent-rgb), 0.25);
+}
+
+.mood-card-btn.active {
+    background: rgba(var(--color-accent-rgb), 0.18);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+    box-shadow: 0 4px 15px rgba(var(--color-accent-rgb), 0.3);
+    animation: activeSpring 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Soft animated border for active premium state */
+.mood-card-btn.active::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 14px;
+    border: 1px solid rgba(var(--color-accent-rgb), 0.6);
+    animation: borderPulse 2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes activeSpring {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.08) translateY(-4px); }
+    100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes borderPulse {
+    0% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.02); }
+    100% { opacity: 0.3; transform: scale(1); }
+}
+
+/* AI Adapting Status Bubble */
+.ai-adapting-bubble {
+    position: absolute;
+    top: -35px;
+    background: rgba(10, 12, 18, 0.85);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 99px;
+    padding: 0.35rem 0.85rem;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    white-space: nowrap;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(10px) scale(0.9);
+    z-index: 20;
+}
+
+.ai-adapting-bubble.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* AI Interactive Orb Mood states styling */
+.hero-orb {
+    transition: background 1s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Focused: Sharper blue glow, faster orbit lines */
+.hero-orb.mood-focused {
+    background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #3b82f6 50%, #1d4ed8 100%);
+    box-shadow: 0 15px 50px rgba(59, 130, 246, 0.65), inset 0 -10px 25px rgba(0, 0, 0, 0.2), inset 0 10px 20px rgba(255, 255, 255, 0.4);
+}
+.hero-orb-ring-1.mood-focused {
+    border-color: rgba(59, 130, 246, 0.45);
+    animation-duration: 12s;
+}
+.hero-orb-ring-2.mood-focused {
+    border-color: rgba(59, 130, 246, 0.35);
+    animation-duration: 18s;
+}
+
+/* Calm: Soft green glow, slow floating */
+.hero-orb.mood-calm {
+    background: radial-gradient(circle at 35% 35%, #a7f3d0 0%, #10b981 50%, #047857 100%);
+    box-shadow: 0 15px 50px rgba(16, 185, 129, 0.5), inset 0 -10px 25px rgba(0, 0, 0, 0.2), inset 0 10px 20px rgba(255, 255, 255, 0.4);
+}
+.hero-orb-ring-1.mood-calm {
+    border-color: rgba(16, 185, 129, 0.35);
+    animation-duration: 35s;
+}
+.hero-orb-ring-2.mood-calm {
+    border-color: rgba(16, 185, 129, 0.25);
+    animation-duration: 45s;
+}
+
+/* Overwhelmed: Muted lavender glow, slight pulse, reduced particle movement */
+.hero-orb.mood-overwhelmed {
+    background: radial-gradient(circle at 35% 35%, #c084fc 0%, #8b5cf6 50%, #6d28d9 100%);
+    box-shadow: 0 15px 45px rgba(139, 92, 246, 0.45), inset 0 -10px 25px rgba(0, 0, 0, 0.2), inset 0 10px 20px rgba(255, 255, 255, 0.4);
+    animation: orbFloat 8s ease-in-out infinite alternate, orbPulseSlow 2s ease-in-out infinite alternate !important;
+}
+.hero-orb-ring-1.mood-overwhelmed {
+    border-color: rgba(139, 92, 246, 0.2);
+    animation-duration: 40s;
+}
+.hero-orb-ring-2.mood-overwhelmed {
+    border-color: rgba(139, 92, 246, 0.15);
+    animation-duration: 50s;
+}
+@keyframes orbPulseSlow {
+    0% { transform: scale(0.97); }
+    100% { transform: scale(1.03); }
+}
+
+/* Motivated: Warm orange glow, energetic particle motion */
+.hero-orb.mood-motivated {
+    background: radial-gradient(circle at 35% 35%, #fed7aa 0%, #f97316 50%, #c2410c 100%);
+    box-shadow: 0 15px 55px rgba(249, 115, 22, 0.7), inset 0 -10px 25px rgba(0, 0, 0, 0.2), inset 0 10px 20px rgba(255, 255, 255, 0.4);
+}
+.hero-orb-ring-1.mood-motivated {
+    border-color: rgba(249, 115, 22, 0.5);
+    animation-duration: 8s;
+}
+.hero-orb-ring-2.mood-motivated {
+    border-color: rgba(249, 115, 22, 0.4);
+    animation-duration: 12s;
+}
+
+/* Tired: Soft blue-gray glow, gentle breathing */
+.hero-orb.mood-tired {
+    background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 50%, #475569 100%);
+    box-shadow: 0 15px 40px rgba(100, 116, 139, 0.4), inset 0 -10px 25px rgba(0, 0, 0, 0.2), inset 0 10px 20px rgba(255, 255, 255, 0.4);
+    animation: orbFloat 8s ease-in-out infinite alternate, orbBreath 3.5s ease-in-out infinite alternate !important;
+}
+.hero-orb-ring-1.mood-tired {
+    border-color: rgba(100, 116, 139, 0.2);
+    animation-duration: 35s;
+}
+.hero-orb-ring-2.mood-tired {
+    border-color: rgba(100, 116, 139, 0.15);
+    animation-duration: 45s;
+}
+@keyframes orbBreath {
+    0% { transform: scale(0.95); opacity: 0.85; }
+    100% { transform: scale(1.05); opacity: 1; }
+}

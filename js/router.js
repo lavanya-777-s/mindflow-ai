@@ -26,9 +26,21 @@
                             <p class="hero-subtitle animate-fade-in stagger-3" style="margin-bottom: 2.5rem;">
                                 MindFlow AI analyzes workload, stress patterns, and productivity behavior to create smarter study experiences.
                             </p>
-                            <div class="hero-buttons animate-fade-in stagger-4" style="margin-bottom: 2.5rem;">
+                            <div class="hero-buttons animate-fade-in stagger-4" style="margin-bottom: 2.0rem;">
                                 <a href="/ai-companion" class="action-btn" data-route="/ai-companion">Start Journey</a>
                                 <a href="#features-preview" class="secondary-btn" id="explore-features-btn">Explore Features</a>
+                            </div>
+
+                            <!-- Mood Selection Container -->
+                            <div class="mood-selection-container animate-fade-in stagger-4" style="margin-bottom: 2.0rem; text-align: left;">
+                                <span class="input-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.72rem; color: var(--color-text-secondary);">How are you feeling today?</span>
+                                <div class="mood-cards-row">
+                                    <button class="mood-card-btn" data-mood="focused">😊 Focused</button>
+                                    <button class="mood-card-btn" data-mood="calm">😌 Calm</button>
+                                    <button class="mood-card-btn" data-mood="overwhelmed">😓 Overwhelmed</button>
+                                    <button class="mood-card-btn" data-mood="motivated">⚡ Motivated</button>
+                                    <button class="mood-card-btn" data-mood="tired">😴 Tired</button>
+                                </div>
                             </div>
                             
                             <!-- Hero Preview Cards -->
@@ -43,6 +55,7 @@
                         </div>
                         <div class="hero-right animate-fade-in stagger-2" id="hero-interactive-scene">
                             <div class="hero-orb-wrapper">
+                                <div id="ai-adapting-status" class="ai-adapting-bubble" style="opacity:0; pointer-events:none;">Adapting experience...</div>
                                 <div class="hero-orb-ring hero-orb-ring-1"></div>
                                 <div class="hero-orb-ring hero-orb-ring-2"></div>
                                 <div class="hero-orb" id="hero-ai-orb">
@@ -369,7 +382,7 @@
                 <section class="cta-section" style="margin-top: 2rem;">
                     <div class="glass-card cta-card animate-fade-in stagger-3">
                         <h2 class="cta-title" style="margin-bottom: 1.25rem;">Ready to take control of your academic life?</h2>
-                        <p class="section-desc" style="max-width: 600px; margin: 0.5rem auto 2.2rem auto; color: var(--color-text-secondary); font-size: 0.95rem;">MindFlow AI helps students understand workload, focus better, and reduce stress.</p>
+                        <p class="section-desc" style="max-width: 600px; margin: 0.5rem auto 2.2rem auto; color: var(--color-text-secondary); font-size: 0.95rem;">MindFlow AI helps students understand workload, improve focus, and reduce stress.</p>
                         <div class="cta-buttons" style="display:flex; gap:1.25rem; justify-content:center;">
                             <a href="/ai-companion" class="action-btn" data-route="/ai-companion">Get Started</a>
                             <a href="#features-preview" class="secondary-btn" id="explore-features-btn-footer">Explore Features</a>

@@ -25,6 +25,7 @@
         const dot1 = document.getElementById('step-dot-1');
         const dot2 = document.getElementById('step-dot-2');
         const dot3 = document.getElementById('step-dot-3');
+        const pctText = document.getElementById('ai-moment-percentage');
         const fCards = document.querySelectorAll('.floating-ai-card');
 
         if (!overlay || !statusText) {
@@ -36,10 +37,22 @@
         // Show overlay
         overlay.style.display = 'flex';
         overlay.style.opacity = '1';
-        statusText.textContent = "Analyzing workload...";
+        statusText.textContent = "Analyzing...";
         dot1.className = 'step-dot active';
         dot2.className = 'step-dot';
         dot3.className = 'step-dot';
+        if (pctText) pctText.textContent = "0%";
+
+        let startPct = 0;
+        const pctInterval = setInterval(() => {
+            startPct += Math.floor(Math.random() * 4) + 2;
+            if (startPct >= 100) {
+                startPct = 100;
+                clearInterval(pctInterval);
+            }
+            if (pctText) pctText.textContent = `${startPct}%`;
+        }, 50);
+        activeIntervals.push(pctInterval);
 
         // Phase 1: Chaos Layout (Scatter cards randomly)
         fCards.forEach((card, index) => {
@@ -54,7 +67,7 @@
 
         // Phase 2: AI Processing (Cards pull in towards the center orb and glow)
         const t1 = setTimeout(() => {
-            statusText.textContent = "Detecting stress patterns...";
+            statusText.textContent = "Detecting patterns...";
             dot1.className = 'step-dot';
             dot2.className = 'step-dot active';
 
@@ -90,6 +103,7 @@
             const tFade = setTimeout(() => {
                 overlay.style.display = 'none';
                 overlay.style.transition = '';
+                clearInterval(pctInterval);
                 callback();
             }, 300);
             activeIntervals.push(tFade);
@@ -146,6 +160,35 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        function appendStreamingMessage(sender, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message assistant';
+            msgDiv.innerHTML = `
+                <div class="message-sender" style="color: var(--color-accent); font-weight:600; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.2rem; margin-top:0.6rem;">${sender}</div>
+                <div class="message-text" style="font-size:0.9rem; line-height:1.4;"></div>
+            `;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            const textContainer = msgDiv.querySelector('.message-text');
+            const tokens = text.match(/<[^>]+>|[^<>\s]+|\s+/g) || [text];
+            let currentTokenIndex = 0;
+            
+            function showNextToken() {
+                if (currentTokenIndex < tokens.length) {
+                    textContainer.innerHTML += tokens[currentTokenIndex];
+                    currentTokenIndex++;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    const isTag = tokens[currentTokenIndex - 1].startsWith('<');
+                    const delay = isTag ? 0 : Math.random() * 25 + 15;
+                    const timer = setTimeout(showNextToken, delay);
+                    activeIntervals.push(timer);
+                }
+            }
+            showNextToken();
+        }
+
         function appendTypingIndicator() {
             const typingDiv = document.createElement('div');
             typingDiv.className = 'chat-message assistant typing-indicator-msg';
@@ -173,7 +216,7 @@
             const query = userInput.toLowerCase();
             let response = "";
 
-            if (query.includes('schedule') || query.includes('organize') || query.includes('study plan')) {
+            if (query.includes('schedule') || query.includes('organize') || query.includes('study plan') || query.includes('create a study plan')) {
                 response = "I've structured a balanced study plan for tomorrow:<br><br>" +
                            "• <b>09:00 AM - 10:30 AM:</b> Cognitive peak slot (Calculus quiz preparation)<br>" +
                            "• <b>10:30 AM - 10:45 AM:</b> Screen-free hydration break<br>" +
@@ -203,7 +246,7 @@
 
             const responseTimer = setTimeout(() => {
                 removeTypingIndicator();
-                appendMessage("MindFlow AI", response, true);
+                appendStreamingMessage("MindFlow AI", response);
             }, 1100);
 
             activeIntervals.push(responseTimer);
@@ -222,12 +265,32 @@
             if (e.key === 'Enter') handleSend();
         });
 
+        function simulateUserTypingAndSend(text) {
+            chatInput.value = '';
+            chatInput.focus();
+            let charIndex = 0;
+            
+            function typeNextChar() {
+                if (charIndex < text.length) {
+                    chatInput.value += text[charIndex];
+                    charIndex++;
+                    const timer = setTimeout(typeNextChar, Math.random() * 15 + 10);
+                    activeIntervals.push(timer);
+                } else {
+                    const timer = setTimeout(() => {
+                        handleSend();
+                    }, 150);
+                    activeIntervals.push(timer);
+                }
+            }
+            typeNextChar();
+        }
+
         // Prompt Chips click
         prompts.forEach(chip => {
             chip.addEventListener('click', () => {
                 const prompt = chip.getAttribute('data-prompt');
-                appendMessage("You", prompt, false);
-                generateAIResponse(prompt);
+                simulateUserTypingAndSend(prompt);
             });
         });
 
@@ -235,8 +298,13 @@
         actions.forEach(act => {
             act.addEventListener('click', () => {
                 const action = act.getAttribute('data-action');
-                appendMessage("You", action, false);
-                generateAIResponse(action);
+                let typedText = action;
+                if (action === "Create Study Plan") typedText = "Help me create a study plan";
+                else if (action === "Reduce Stress") typedText = "I need to reduce my stress levels";
+                else if (action === "Prioritize Tasks") typedText = "Help me prioritize my tasks";
+                else if (action === "Optimize Schedule") typedText = "How do I optimize my study schedule?";
+                
+                simulateUserTypingAndSend(typedText);
             });
         });
     }
@@ -699,7 +767,7 @@
             let contributors = [];
             if (sleepVal < 7.0) contributors.push("• Sleep deficit");
             if (deadlinesVal > 3) contributors.push("• Assignment overload");
-            if (stressVal > 6) contributors.push("• High stress level");
+            if (stressVal > 6) contributors.push("• High stress");
             if (studyVal > 8) contributors.push("• Study duration peaks");
             if (contributors.length === 0) contributors.push("• Load metrics balanced");
 

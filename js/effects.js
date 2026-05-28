@@ -32,6 +32,8 @@
     };
 
     let activeColors = themeColors['home'];
+    let motionSpeedFactor = 1.0;
+    let currentMood = 'home';
 
     // Standard floating star particle class
     class Star {
@@ -51,9 +53,11 @@
 
         update() {
             // Slow upwards drift (calm movement)
-            this.y -= this.speed;
+            this.y -= this.speed * motionSpeedFactor;
             // Add a slow horizontal wave sway
-            this.x += Math.sin(this.y * 0.01) * 0.12;
+            const swayAmount = currentMood === 'tired' ? 0.7 : 0.12;
+            const waveFreq = currentMood === 'tired' ? 0.025 : 0.01;
+            this.x += Math.sin(this.y * waveFreq) * swayAmount * motionSpeedFactor;
             if (this.y < 0 || this.x < 0 || this.x > width) {
                 this.reset();
                 this.y = height;
@@ -74,6 +78,17 @@
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
+
+            // Motivated mode energetic streaks
+            if (currentMood === 'motivated') {
+                ctx.strokeStyle = activeColors.spark;
+                ctx.globalAlpha = this.opacity * 0.45;
+                ctx.lineWidth = this.size * 0.8;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - Math.sin(this.y * 0.01) * 2, this.y + this.speed * 8);
+                ctx.stroke();
+            }
         }
     }
 
@@ -116,9 +131,9 @@
             this.vy *= 0.98;
 
             // Move
-            this.x += this.vx;
-            this.y += this.vy;
-            this.angle += this.rotationSpeed;
+            this.x += this.vx * motionSpeedFactor;
+            this.y += this.vy * motionSpeedFactor;
+            this.angle += this.rotationSpeed * motionSpeedFactor;
 
             // Handle edge wrapping with safety padding
             const pad = this.radius * 1.5;
@@ -208,6 +223,25 @@
             p.update();
             p.draw();
         });
+
+        // Structured particles: draw faint lines between nearby stars in Focused mode
+        if (currentMood === 'focused') {
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.05)';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
 
         // Render & Update floaters
         antiGravityObjects.forEach(obj => {
@@ -310,6 +344,17 @@
             } else {
                 activeColors = themeColors['home'];
             }
+            motionSpeedFactor = 1.0; // Revert speed to normal on page change
+            currentMood = 'home';
+        },
+        setMoodParams: function (params) {
+            activeColors = {
+                primary: params.primary,
+                alt: params.alt,
+                spark: params.spark
+            };
+            motionSpeedFactor = params.speed;
+            currentMood = params.mood;
         }
     };
 
