@@ -1,6 +1,10 @@
 # Mindflow AI
 MindFlow AI helps students balance workload, track stress patterns, and create smarter study plans using AI-powered insights.
 
+## Live Demo
+
+https://mindflow-ai-ssds.vercel.app/
+
 ## Features
 
 - AI Burnout Detection
